@@ -69,6 +69,6 @@
 
 本仓库文件聚合自以下开源项目，**感谢所有乐于分享的热心网友！**
 
-* **配置大佬**: [HenryChiao](https://github.com/HenryChiao), [666OS](https://github.com/666OS), [JohnsonRan](https://github.com/JohnsonRan), [yiteei](https://github.com/yiteei), [liandu2024](https://github.com/liandu2024), [yyhhyyyyyy](https://github.com/yyhhyyyyyy), [echs-top](https://github.com/echs-top), [qichiyuhub](https://github.com/qichiyuhub), [iKelee](https://github.com/luestr), [Lanlan13-14](https://github.com/Lanlan13-14/Rules)
+* **配置大佬**: [HenryChiao](https://github.com/HenryChiao), [666OS](https://github.com/666OS), [JohnsonRan](https://github.com/JohnsonRan), [yiteei](https://github.com/yiteei), [liandu2024](https://github.com/liandu2024), [yyhhyyyyyy](https://github.com/yyhhyyyyyy), [echs-top](https://github.com/echs-top), [qichiyuhub](https://github.com/qichiyuhub), [iKelee](https://github.com/luestr), [Fufu](https://github.com/sunfing), [Lanlan13-14](https://github.com/Lanlan13-14/Rules)
 * **手机模块**: [Surfing](https://github.com/GitMetaio/Surfing), [AkashaProxy](https://github.com/akashaProxy/akashaProxy), [ClashMix](https://github.com/AXEVO/Clash-MIX), [BoxProxy](https://github.com/boxproxy/box)
 * **官方示例**: [MihomoWiki](https://wiki.metacubex.one/)
