@@ -10,7 +10,7 @@
 
 | 特性 / 文件 | 大小 (Size) | `MihomoSmartAIO.yaml` | `MihomoSmartProMax.yaml` | `MihomoSmartProPlus.yaml` |
 | :--- | :--- | :--- | :--- | :--- |
-| **文件大小** | - | 32.1 KB | 25.2 KB | 25.6 KB |
+| **文件大小** | - | 32.1 KB | 25.2 KB | 25.7 KB |
 | **混合端口** | - | 7893 | 7893 | 7893 |
 | **运行模式** | - | rule | rule | rule |
 | **TUN 模式** | - | 🚫 关闭 | 🚫 关闭 | 🚫 关闭 |
@@ -107,7 +107,7 @@
 ---
 
 ### 📝 MihomoSmartProPlus.yaml
-- **大小**: 25.6 KB
+- **大小**: 25.7 KB
 - **链接**: [查看源码](https://github.com/HenryChiao/mihomo_yamls/blob/main/Smart_Mode/HenryChiao/MihomoSmartProPlus.yaml)
 
 <details>
@@ -154,4 +154,4 @@
 | :--- | :--- | :--- |
 | `MihomoSmartAIO.yaml` | 32.1 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/Smart_Mode/HenryChiao/MihomoSmartAIO.yaml) |
 | `MihomoSmartProMax.yaml` | 25.2 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/Smart_Mode/HenryChiao/MihomoSmartProMax.yaml) |
-| `MihomoSmartProPlus.yaml` | 25.6 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/Smart_Mode/HenryChiao/MihomoSmartProPlus.yaml) |
+| `MihomoSmartProPlus.yaml` | 25.7 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/Smart_Mode/HenryChiao/MihomoSmartProPlus.yaml) |

@@ -10,7 +10,7 @@
 
 | 特性 / 文件 | 大小 (Size) | `MihomoAIO.yaml` | `MihomoProMax.yaml` | `MihomoProPlus.yaml` |
 | :--- | :--- | :--- | :--- | :--- |
-| **文件大小** | - | 30.1 KB | 27.4 KB | 27.9 KB |
+| **文件大小** | - | 30.1 KB | 27.5 KB | 28.0 KB |
 | **混合端口** | - | 7893 | 7893 | 7893 |
 | **运行模式** | - | rule | rule | rule |
 | **TUN 模式** | - | 🚫 关闭 | 🚫 关闭 | 🚫 关闭 |
@@ -65,7 +65,7 @@
 ---
 
 ### 📝 MihomoProMax.yaml
-- **大小**: 27.4 KB
+- **大小**: 27.5 KB
 - **链接**: [查看源码](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/HenryChiao/MihomoProMax.yaml)
 
 <details>
@@ -107,7 +107,7 @@
 ---
 
 ### 📝 MihomoProPlus.yaml
-- **大小**: 27.9 KB
+- **大小**: 28.0 KB
 - **链接**: [查看源码](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/HenryChiao/MihomoProPlus.yaml)
 
 <details>
@@ -142,5 +142,5 @@
 | 文件名 | 大小 | 链接 |
 | :--- | :--- | :--- |
 | `MihomoAIO.yaml` | 30.1 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/HenryChiao/MihomoAIO.yaml) |
-| `MihomoProMax.yaml` | 27.4 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/HenryChiao/MihomoProMax.yaml) |
-| `MihomoProPlus.yaml` | 27.9 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/HenryChiao/MihomoProPlus.yaml) |
+| `MihomoProMax.yaml` | 27.5 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/HenryChiao/MihomoProMax.yaml) |
+| `MihomoProPlus.yaml` | 28.0 KB | [查看](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/HenryChiao/MihomoProPlus.yaml) |
