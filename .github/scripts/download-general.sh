@@ -13,6 +13,9 @@ https://raw.githubusercontent.com/666OS/YYDS/main/mihomo/config/OneTouch.yaml|TH
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/MihomoAIO.yaml|THEYAMLS/General_Config/HenryChiao/MihomoAIO.yaml
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/MihomoProMax.yaml|THEYAMLS/General_Config/HenryChiao/MihomoProMax.yaml
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/MihomoProPlus.yaml|THEYAMLS/General_Config/HenryChiao/MihomoProPlus.yaml
+https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/Kerronex_config.yaml|THEYAMLS/General_Config/Kerronex/config.yaml
+https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/Mitchell_config.yaml|THEYAMLS/General_Config/Mitchell/config.yaml
+https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/Mitchell_config_version2.yaml|THEYAMLS/General_Config/Mitchell/config_version2.yaml
 https://raw.githubusercontent.com/yyhhyyyyyy/selfproxy/refs/heads/main/Mihomo/mihomo_single.yaml|THEYAMLS/General_Config/yyhhyyyyyy/mihomo_single.yaml
 https://raw.githubusercontent.com/yyhhyyyyyy/selfproxy/refs/heads/main/Mihomo/mihomo_multi.yaml|THEYAMLS/General_Config/yyhhyyyyyy/mihomo_multi.yaml
 https://raw.githubusercontent.com/liandu2024/little/refs/heads/main/yaml/clash-fallback.yaml|THEYAMLS/General_Config/liandu2024/clash-fallback.yaml
