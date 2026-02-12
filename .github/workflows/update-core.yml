@@ -1,5 +1,8 @@
 name: Update Core
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -57,22 +60,18 @@ jobs:
     
     outputs:
       ref1nd_main_version: ${{ steps.versions.outputs.ref1nd_main_version }}
-      ref1nd_main_time: ${{ steps.versions.outputs.ref1nd_main_time }}
       ref1nd_main_tags: ${{ steps.versions.outputs.ref1nd_main_tags }}
       ref1nd_main_skip: ${{ steps.compare.outputs.ref1nd_main_skip }}
       
       ref1nd_dev_version: ${{ steps.versions.outputs.ref1nd_dev_version }}
-      ref1nd_dev_time: ${{ steps.versions.outputs.ref1nd_dev_time }}
       ref1nd_dev_tags: ${{ steps.versions.outputs.ref1nd_dev_tags }}
       ref1nd_dev_skip: ${{ steps.compare.outputs.ref1nd_dev_skip }}
       
       sagernet_release_version: ${{ steps.versions.outputs.sagernet_release_version }}
-      sagernet_release_time: ${{ steps.versions.outputs.sagernet_release_time }}
       sagernet_release_tags: ${{ steps.versions.outputs.sagernet_release_tags }}
       sagernet_release_skip: ${{ steps.compare.outputs.sagernet_release_skip }}
       
       sagernet_dev_version: ${{ steps.versions.outputs.sagernet_dev_version }}
-      sagernet_dev_time: ${{ steps.versions.outputs.sagernet_dev_time }}
       sagernet_dev_tags: ${{ steps.versions.outputs.sagernet_dev_tags }}
       sagernet_dev_skip: ${{ steps.compare.outputs.sagernet_dev_skip }}
     
@@ -80,52 +79,38 @@ jobs:
       - name: 检测所有版本
         id: versions
         run: |
-          # reF1nd-main
+          # === reF1nd-main ===
           git clone --depth=1 --branch=reF1nd-main https://github.com/reF1nd/sing-box.git /tmp/ref1nd-main 2>/dev/null || true
           if [[ -d /tmp/ref1nd-main ]]; then
             cd /tmp/ref1nd-main
             REF1ND_MAIN_VER=$(git tag -l --sort=-v:refname 2>/dev/null | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+.*-reF1nd' | head -n1 | sed 's/^v//')
-            REF1ND_MAIN_TIME=$(git log -1 --format=%cd --date=format:'%Y-%m-%d' HEAD 2>/dev/null || echo "unknown")
           else
             REF1ND_MAIN_VER="unknown"
-            REF1ND_MAIN_TIME="unknown"
           fi
           echo "ref1nd_main_version=${REF1ND_MAIN_VER}" >> $GITHUB_OUTPUT
-          echo "ref1nd_main_time=${REF1ND_MAIN_TIME}" >> $GITHUB_OUTPUT
-          # 关键修复：移除已弃用的 with_ech 和 with_reality_server 标签
           echo "ref1nd_main_tags=with_gvisor,with_quic,with_dhcp,with_utls,with_clash_api" >> $GITHUB_OUTPUT
           
-          # reF1nd-dev
+          # === reF1nd-dev ===
           git clone --depth=1 --branch=reF1nd-dev https://github.com/reF1nd/sing-box.git /tmp/ref1nd-dev 2>/dev/null || true
           if [[ -d /tmp/ref1nd-dev ]]; then
             cd /tmp/ref1nd-dev
             REF1ND_DEV_VER=$(git tag -l --sort=-v:refname 2>/dev/null | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+.*(alpha|beta|rc).*-reF1nd' | head -n1 | sed 's/^v//')
-            REF1ND_DEV_TIME=$(git log -1 --format=%cd --date=format:'%Y-%m-%d' HEAD 2>/dev/null || echo "unknown")
           else
             REF1ND_DEV_VER="unknown"
-            REF1ND_DEV_TIME="unknown"
           fi
           echo "ref1nd_dev_version=${REF1ND_DEV_VER}" >> $GITHUB_OUTPUT
-          echo "ref1nd_dev_time=${REF1ND_DEV_TIME}" >> $GITHUB_OUTPUT
-          # 关键修复：移除已弃用的标签
           echo "ref1nd_dev_tags=with_gvisor,with_quic,with_dhcp,with_utls,with_clash_api" >> $GITHUB_OUTPUT
           
-          # SagerNet-release
+          # === SagerNet-release ===
           SAGERNET_REL_API=$(curl -sSL https://api.github.com/repos/SagerNet/sing-box/releases/latest)
           SAGERNET_REL_VER=$(echo "$SAGERNET_REL_API" | jq -r '.tag_name' | sed 's/^v//')
-          SAGERNET_REL_TIME=$(echo "$SAGERNET_REL_API" | jq -r '.created_at' | cut -dT -f1)
           echo "sagernet_release_version=${SAGERNET_REL_VER}" >> $GITHUB_OUTPUT
-          echo "sagernet_release_time=${SAGERNET_REL_TIME}" >> $GITHUB_OUTPUT
-          # 关键修复：移除已弃用的标签
           echo "sagernet_release_tags=with_gvisor,with_quic,with_dhcp,with_utls,with_clash_api" >> $GITHUB_OUTPUT
           
-          # SagerNet-dev
+          # === SagerNet-dev ===
           SAGERNET_DEV_API=$(curl -sSL https://api.github.com/repos/SagerNet/sing-box/releases)
           SAGERNET_DEV_VER=$(echo "$SAGERNET_DEV_API" | jq -r '[.[] | select(.prerelease==true)][0].tag_name' | sed 's/^v//')
-          SAGERNET_DEV_TIME=$(echo "$SAGERNET_DEV_API" | jq -r '[.[] | select(.prerelease==true)][0].created_at' | cut -dT -f1)
           echo "sagernet_dev_version=${SAGERNET_DEV_VER}" >> $GITHUB_OUTPUT
-          echo "sagernet_dev_time=${SAGERNET_DEV_TIME}" >> $GITHUB_OUTPUT
-          # 关键修复：移除已弃用的标签
           echo "sagernet_dev_tags=with_gvisor,with_quic,with_dhcp,with_utls,with_clash_api" >> $GITHUB_OUTPUT
 
       - name: 版本比对
@@ -137,7 +122,6 @@ jobs:
             echo "sagernet_release_skip=false" >> $GITHUB_OUTPUT
             echo "sagernet_dev_skip=false" >> $GITHUB_OUTPUT
           else
-            # 简化逻辑：只要不是unknown就不跳过
             [[ "${{ steps.versions.outputs.ref1nd_main_version }}" != "unknown" ]] && echo "ref1nd_main_skip=false" || echo "ref1nd_main_skip=true"
             [[ "${{ steps.versions.outputs.ref1nd_dev_version }}" != "unknown" ]] && echo "ref1nd_dev_skip=false" || echo "ref1nd_dev_skip=true"
             [[ "${{ steps.versions.outputs.sagernet_release_version }}" != "null" ]] && echo "sagernet_release_skip=false" || echo "sagernet_release_skip=true"
@@ -145,7 +129,7 @@ jobs:
           fi
 
   # ========================================================================
-  # mihomo版本检测
+  # mihomo版本检测 (修复Alpha和Smart)
   # ========================================================================
   check-mihomo:
     name: 检测mihomo版本
@@ -157,66 +141,76 @@ jobs:
     
     outputs:
       meta_version: ${{ steps.versions.outputs.meta_version }}
-      meta_time: ${{ steps.versions.outputs.meta_time }}
       meta_skip: ${{ steps.versions.outputs.meta_skip }}
       
       alpha_version: ${{ steps.versions.outputs.alpha_version }}
-      alpha_time: ${{ steps.versions.outputs.alpha_time }}
       alpha_skip: ${{ steps.versions.outputs.alpha_skip }}
       
       smart_version: ${{ steps.versions.outputs.smart_version }}
-      smart_time: ${{ steps.versions.outputs.smart_time }}
       smart_skip: ${{ steps.versions.outputs.smart_skip }}
     
-
     steps:
       - name: 检测所有版本
         id: versions
         run: |
-          # Meta - 获取最新正式版
+          # ---------------------------------------------------
+          # 1. Meta (正式版) - 获取 Latest
+          # ---------------------------------------------------
           META_API=$(curl -sSL https://api.github.com/repos/MetaCubeX/mihomo/releases/latest)
           META_VER=$(echo "$META_API" | jq -r '.tag_name')
-          META_TIME=$(echo "$META_API" | jq -r '.created_at' | cut -dT -f1)
-          echo "meta_version=${META_VER}" >> $GITHUB_OUTPUT
-          echo "meta_time=${META_TIME}" >> $GITHUB_OUTPUT
-          echo "meta_skip=false" >> $GITHUB_OUTPUT
           
-          # Alpha - 关键修复：从Prerelease-Alpha的body或tag_name中提取实际版本号
+          if [[ "$META_VER" != "null" && -n "$META_VER" ]]; then
+             echo "meta_version=${META_VER}" >> $GITHUB_OUTPUT
+             echo "meta_skip=false" >> $GITHUB_OUTPUT
+             echo "✅ Meta Release: ${META_VER}"
+          else
+             echo "meta_skip=true" >> $GITHUB_OUTPUT
+             echo "⚠️ Meta Release check failed."
+          fi
+          
+          # ---------------------------------------------------
+          # 2. Alpha (MetaCubeX) - Prerelease-Alpha
+          # ---------------------------------------------------
           ALPHA_API=$(curl -sSL https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha)
-          # 尝试从tag_name获取，如果失败则从body中提取
-          ALPHA_VER=$(echo "$ALPHA_API" | jq -r '.tag_name')
-          if [[ "$ALPHA_VER" == "Prerelease-Alpha" ]] || [[ "$ALPHA_VER" == "null" ]]; then
-            # 尝试从body中提取版本号，例如 "Alpha-1.20.0" 或 "1.20.0"
-            ALPHA_VER=$(echo "$ALPHA_API" | jq -r '.body' | grep -oP 'mihomo-\K[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || echo "")
-            # 如果还是失败，使用发布日期作为版本标识
-            if [[ -z "$ALPHA_VER" ]]; then
-              ALPHA_VER="alpha-$(echo "$ALPHA_API" | jq -r '.created_at' | cut -dT -f1 | tr -d '-')"
-            fi
-          fi
-          ALPHA_TIME=$(echo "$ALPHA_API" | jq -r '.created_at' | cut -dT -f1)
-          echo "alpha_version=${ALPHA_VER}" >> $GITHUB_OUTPUT
-          echo "alpha_time=${ALPHA_TIME}" >> $GITHUB_OUTPUT
-          echo "alpha_skip=false" >> $GITHUB_OUTPUT
           
-          # Smart - 关键修复：vernesong/mihomo的API端点
-          SMART_API=$(curl -sSL https://api.github.com/repos/vernesong/mihomo/releases/latest)
-          SMART_VER=$(echo "$SMART_API" | jq -r '.tag_name // empty')
-          # 如果失败，尝试不带latest的端点
-          if [[ -z "$SMART_VER" ]] || [[ "$SMART_VER" == "null" ]]; then
-            SMART_API=$(curl -sSL "https://api.github.com/repos/vernesong/mihomo/releases")
-            SMART_VER=$(echo "$SMART_API" | jq -r '[.[]][0].tag_name // empty')
+          if [[ $(echo "$ALPHA_API" | jq -r '.tag_name') == "Prerelease-Alpha" ]]; then
+            # 关键修复：下载脚本硬编码了URL为Prerelease-Alpha，但文件名需要具体的版本号
+            # 我们从 assets 中解析真实的文件名版本后缀 (例如: alpha-c0de123)
+            # 查找 mihomo-linux-amd64-{version}.gz
+            REAL_VERSION=$(echo "$ALPHA_API" | jq -r '.assets[] | select(.name | contains("linux-amd64-alpha")) | .name' | head -n1 | sed 's/mihomo-linux-amd64-//;s/\.gz//')
+            
+            if [[ -z "$REAL_VERSION" ]]; then
+               # 如果解析失败，回退到 Prerelease-Alpha
+               REAL_VERSION="Prerelease-Alpha"
+            fi
+            
+            echo "alpha_version=${REAL_VERSION}" >> $GITHUB_OUTPUT
+            echo "alpha_skip=false" >> $GITHUB_OUTPUT
+            echo "✅ Meta Alpha: ${REAL_VERSION} (Tag: Prerelease-Alpha)"
+          else
+            echo "alpha_skip=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Meta Alpha check failed."
           fi
-          SMART_TIME=$(echo "$SMART_API" | jq -r '.created_at // .[0].created_at' | cut -dT -f1)
-          echo "smart_version=${SMART_VER}" >> $GITHUB_OUTPUT
-          echo "smart_time=${SMART_TIME}" >> $GITHUB_OUTPUT
-          if [[ -n "$SMART_VER" ]] && [[ "$SMART_VER" != "null" ]]; then
+          
+          # ---------------------------------------------------
+          # 3. Smart (Vernesong) - Prerelease-Alpha
+          # ---------------------------------------------------
+          SMART_API=$(curl -sSL https://api.github.com/repos/vernesong/mihomo/releases/tags/Prerelease-Alpha)
+          SMART_TAG=$(echo "$SMART_API" | jq -r '.tag_name')
+
+          if [[ "$SMART_TAG" == "Prerelease-Alpha" ]]; then
+            # 这里的下载脚本逻辑是: URL = .../download/${version}
+            # 所以为了能请求到正确的URL，版本必须是 Tag 名
+            echo "smart_version=${SMART_TAG}" >> $GITHUB_OUTPUT
             echo "smart_skip=false" >> $GITHUB_OUTPUT
+            echo "✅ Smart Alpha: ${SMART_TAG}"
           else
             echo "smart_skip=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Smart Alpha check failed."
           fi
 
   # ========================================================================
-  # sing-box构建任务 - 全平台
+  # sing-box构建任务
   # ========================================================================
   build-singbox-ref1nd-main:
     name: 构建sing-box reF1nd-main
@@ -267,7 +261,7 @@ jobs:
       go_version: ${{ needs.prepare.outputs.go_version }}
 
   # ========================================================================
-  # mihomo下载任务 - 全平台（修复版）
+  # mihomo下载任务
   # ========================================================================
   download-mihomo-meta:
     name: 下载mihomo Meta
@@ -287,6 +281,7 @@ jobs:
     with:
       project: mihomo
       variant: alpha
+      # 这里传递的是实际的文件版本后缀 (e.g., alpha-xxx)，因为脚本已经硬编码了URL
       version: ${{ needs.check-mihomo.outputs.alpha_version }}
   
   download-mihomo-smart:
@@ -297,11 +292,9 @@ jobs:
     with:
       project: mihomo
       variant: smart
+      # 这里传递的是 Tag 名 (Prerelease-Alpha)，因为脚本用它拼接URL
       version: ${{ needs.check-mihomo.outputs.smart_version }}
 
-  # ========================================================================
-  # 产物收集和发布到core分支
-  # ========================================================================
   # ========================================================================
   # 产物收集和发布到core分支
   # ========================================================================
@@ -335,40 +328,34 @@ jobs:
 
       - name: 压缩 UPX 文件
         run: |
-          # 仅处理标记为 upx 的文件
           find ./artifacts -name "*.upx" -type f -exec upx --best --lzma {} \; 2>/dev/null || true
 
       - name: 整理产物目录结构
         run: |
-          # 创建发布目录
           mkdir -p ./publish
           
-          # === 定义目录结构函数 ===
           prepare_dir() {
             mkdir -p "./publish/$1"
           }
           
-          # 创建基础结构
+          # sing-box 目录
           prepare_dir "sing-box/reF1nd/main"
           prepare_dir "sing-box/reF1nd/dev"
           prepare_dir "sing-box/SagerNet/release"
           prepare_dir "sing-box/SagerNet/dev"
+          # mihomo 目录
           prepare_dir "mihomo/MetaCubeX/meta"
           prepare_dir "mihomo/MetaCubeX/alpha"
           prepare_dir "mihomo/vernesong/smart"
 
           echo "开始整理 sing-box..."
-          # 移动 sing-box 产物
           for file in ./artifacts/sing-box-*; do
             [[ -f "$file" ]] || continue
             filename=$(basename "$file")
             
-            # 解析文件名: sing-box-{variant}-{platform}-{arch}.{ext}
-            # 例如: sing-box-ref1nd-main-linux-amd64.tar.gz
-            # 注意：这里的正则需要根据你实际 build 步骤输出的文件名匹配
             if [[ "$filename" =~ sing-box-([^-]+-[^-]+)-(.+)\.(tar\.gz|upx|exe) ]]; then
-              variant="${BASH_REMATCH[1]}" # ref1nd-main
-              platform="${BASH_REMATCH[2]}" # linux-amd64
+              variant="${BASH_REMATCH[1]}"
+              platform="${BASH_REMATCH[2]}"
               
               target_base=""
               case "$variant" in
@@ -386,14 +373,13 @@ jobs:
           done
           
           echo "开始整理 mihomo..."
-          # 移动 mihomo 产物
           for file in ./artifacts/mihomo-*; do
             [[ -f "$file" ]] || continue
             filename=$(basename "$file")
             
             if [[ "$filename" =~ mihomo-([^-]+)-(.+)\.(tar\.gz|upx|exe) ]]; then
-              variant="${BASH_REMATCH[1]}" # meta
-              platform="${BASH_REMATCH[2]}" # linux-amd64
+              variant="${BASH_REMATCH[1]}"
+              platform="${BASH_REMATCH[2]}"
               
               target_base=""
               case "$variant" in
@@ -412,15 +398,9 @@ jobs:
       - name: 生成 Checksum 和 README
         run: |
           cd ./publish
-          
-          # 生成校验和
           echo "生成校验和..."
           find . -type f \( -name "*.tar.gz" -o -name "*.exe" -o -name "*.upx" \) -exec sha256sum {} \; > global_checksums.txt
           
-          # 为每个子目录生成独立的 checksums.txt (可选，如果你需要保持原有逻辑)
-          find . -type d -links 2 -exec sh -c 'cd "$1" && sha256sum * > checksums.txt 2>/dev/null || true' _ {} \;
-
-          # 生成 README.md
           cat > README.md <<EOF
           # Core 核心文件仓库
 
@@ -441,15 +421,10 @@ jobs:
           mihomo/
           ├── MetaCubeX/
           │   ├── meta/      # MetaCubeX 正式版
-          │   └── alpha/     # MetaCubeX 测试版
+          │   └── alpha/     # MetaCubeX 测试版 (Alpha)
           └── vernesong/
-              └── smart/     # OpenClash Smart版
+              └── smart/     # OpenClash Smart版 (Alpha)
           \`\`\`
-
-          ## 文件格式
-          - \`.tar.gz\` - 标准压缩包
-          - \`.exe\` - Windows可执行文件
-          - \`.upx\` - UPX极限压缩版
           EOF
 
       - name: 强制推送到 Core 分支
@@ -462,10 +437,8 @@ jobs:
           git add .
           git commit -m "Update Cores: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           
-          # 关键修改：明确指定带 Token 的 Remote URL
+          # 使用 GITHUB_TOKEN 推送
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          
-          # 强制推送 (覆盖旧记录)
           git push -f origin core
 
       - name: 删除旧的工作流运行记录
